@@ -1,0 +1,97 @@
+﻿@model MyCaffe.Models.DeliveryDetail
+@using Microsoft.AspNet.Identity;
+@using System.Data.Entity;
+@using System.Globalization;
+
+@{
+    ViewBag.Title = "Confirm Order";
+}
+
+<center>
+    <h3> Order #@Model.OrderId Details </h3>
+    <br />
+</center>
+
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+</style>
+
+@{
+    MyCaffe.Models.ApplicationDbContext db = new MyCaffe.Models.ApplicationDbContext();
+
+    //Get Order Items List
+    var userId = db.OrderItems.FirstOrDefault(x => x.OrderId == Model.OrderId).UserId;
+
+    var orderItems = db.OrderItems
+        .Include(f => f.FoodItem)
+        .Where(x => x.UserId == userId)
+        .Where(x => x.OrderId == Model.OrderId);
+
+    var orderItemsList = orderItems.ToList();
+
+    double total = 0;
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            Food Item
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Price
+        </th>
+    </tr>
+
+    @foreach (var item in orderItemsList)
+    {
+        total += item.TotalPrice;
+        <tr>
+            <td>
+                <img style="object-fit: cover" src="~/Uploads/@(item.FoodItem.ImageUrl)" width="80" height="80" />
+                @Html.DisplayFor(modelItem => item.FoodItem.Name)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<h4 style="text-align: right"> <b>Subtotal:</b> @total.ToString("C", CultureInfo.GetCultureInfo("en-za")) </h4>
+<h4 style="text-align: right"> <b>VAT (15%):</b> @(Math.Round(total * 0.15).ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-za"))) </h4>
+<h4 style="text-align: right"> <b>Delivery Price:</b> @Model.DeliveryPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-za")) </h4>
+<h4 style="text-align: right"> <b>Total Price:</b> @Model.Order.TotalPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-za")) </h4>
+<hr />
+
+<h3> Delivery Details </h3>
+
+<dl style="font-size:large">
+    <dt>Campus</dt>
+    <dd> - @Model.DeliveryCampus</dd>
+    <br />
+    <dt>Block</dt>
+    <dd> - @Model.DeliveryBlock</dd>
+    <br />
+    <dt>Delivery Instructions</dt>
+    <dd> - @Model.DeliveryInstructions</dd>
+</dl>
+
+<a type="button" class="btn btn-primary" href="@Url.Action("BackToOrder", "Orders", new { id = Model.OrderId })">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span> Back to Orders </span>
+</a>

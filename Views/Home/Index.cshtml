@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MyCaffe.ViewModels.ThumbnailBoxViewModel>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<center>
+    <h1> Break Zone Cafe </h1>
+
+    <img src="~/fonts/cartoon-gba24f5b5b_1920.png" width="403" height="403" />
+</center>
+
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+
+    <br />
+}
+<div class="row">
+    @foreach (var area in Model)
+    {
+        @Html.Partial("_ThumbnailAreaPartial", area)
+    }
+</div>

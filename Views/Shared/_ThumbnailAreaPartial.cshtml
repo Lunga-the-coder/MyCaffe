@@ -1,0 +1,39 @@
+﻿@model MyCaffe.ViewModels.ThumbnailBoxViewModel
+
+<div class="row">
+    @if (Model.Thumbnails != null)
+    {
+        foreach (var thumbnail in Model.Thumbnails)
+        {
+            <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                    <div class="thumbnail-img-container">
+                        <a href="@thumbnail.Link"><img style="object-fit: cover; width: 260px; height: 220px;" class="thumbnail-img" src="@thumbnail.ImageUrl" alt="" /></a>
+                    </div>
+                    <center>
+                        <div class="caption">
+                            <h3><a href="@thumbnail.Link">@thumbnail.Name</a></h3>
+                            @*<p>@Html.Raw(thumbnail.Description)</p>*@
+                        </div>
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                        {
+                    <a type="button" class="btn btn-primary" href="@Url.Action("AddToCart", "OrderItems", new { id = thumbnail.FoodItemId })">
+                        <span>Add to Cart</span>
+                    </a>
+                            <br /><br />
+                        }
+                        else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        { 
+                            <p> Admins can't order </p>
+                        }
+                        else
+                        {
+                        <p>Login to Order</p>
+                        }
+                    </center>
+                </div>
+            </div>
+        }
+    }
+</div>

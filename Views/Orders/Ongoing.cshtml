@@ -1,0 +1,149 @@
+﻿@model IEnumerable<MyCaffe.Models.Order>
+@using MyCaffe.Models;
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Ongoing Orders";
+    ApplicationDbContext db = new ApplicationDbContext();
+}
+
+<center>
+    <h2> Ongoing Orders </h2>
+</center>
+<br />
+
+<h5><b><i>"Please note that your delivery could take 25-30 minutes to arrive"</i></b></h5>
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h5 {
+        color: red;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+</style>
+
+<table class="table">
+    <tr>
+        <th>
+            Order Id
+        </th>
+        @if (User.IsInRole("Admin"))
+        {
+            <th>
+                Student Name
+            </th>
+        }
+        <th>
+            Total Price
+        </th>
+        <th>
+            Order Date
+        </th>
+        <th>
+            Order Time
+        </th>
+        <th>
+            Estimated Delivery
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        string fullName = "";
+
+        fullName = db.Users.Find(item.UserId).FirstName + " " + db.Users.Find(item.UserId).Surname;
+        <tr>
+            <td>
+                #@Html.DisplayFor(modelItem => item.OrderId)
+
+            </td>
+            @{
+                if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @fullName
+                    </td>
+                }
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedDelivery)
+            </td>
+            <td>
+                @{
+                    string text = "";
+                    string className = "";
+
+                    if (item.Status == Order.OrderStatus.OrderPlaced)
+                    {
+                        text = "Order Placed";
+                        className = "primary";
+                    }
+                    else if (item.Status == Order.OrderStatus.Preparing)
+                    {
+                        text = "Preparing";
+                        className = "danger";
+                    }
+                    else if (item.Status == Order.OrderStatus.OutForDelivery)
+                    {
+                        text = "Out For Delivery";
+                        className = "warning";
+                    }
+                    else if (item.Status == Order.OrderStatus.Delivered)
+                    {
+                        text = "Delivered";
+                        className = "success";
+                    }
+                }
+
+                <a type="button" disabled="disabled" class="btn btn-sm btn-@className">
+                    <span> @text </span>
+                </a> |
+
+                <a type="button" class="btn btn-sm btn-primary" href="@Url.Action("Details", "Orders", new {id=item.OrderId})">
+                    <span class="glyphicon glyphicon-list"></span>
+                    <span> Details </span>
+                </a> |
+
+                @{
+                    if (User.IsInRole("Admin") && item.Status == Order.OrderStatus.OrderPlaced)
+                    {
+                        <a type="button" class="btn btn-sm btn-success" href="@Url.Action("Prepare", "Orders", new {id=item.OrderId})">
+                            <span class="glyphicon glyphicon-fire"></span>
+                        </a>
+                    }
+                    else if (User.IsInRole("Admin") && item.Status == Order.OrderStatus.Preparing)
+                    {
+                        <a type="button" class="btn btn-sm btn-info" href="@Url.Action("OutForDelivery", "Orders", new {id=item.OrderId})">
+                            <span class="glyphicon glyphicon-road"></span>
+                        </a>
+                    }
+                    else if (User.IsInRole("Student") && item.Status == Order.OrderStatus.OutForDelivery)
+                    {
+                        <a type="button" class="btn btn-sm btn-success" href="@Url.Action("Delivered", "Orders", new {id=item.OrderId})">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+

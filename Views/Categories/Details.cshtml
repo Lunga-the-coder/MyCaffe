@@ -1,0 +1,46 @@
+﻿@model MyCaffe.Models.Category
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h3 {
+        font-style: italic;
+    }
+</style>
+
+<h3> Category Details</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+    </dl>
+</div>
+
+
+<div>
+    <a type="button" class="btn btn-success" href="@Url.Action("Edit")/@Model.CategoryId">
+        <span> Edit </span>
+
+    </a>
+
+    <a type="button" class="btn btn-primary" href="@Url.Action("Index")">
+        <span class="glyphicon glyphicon-list"></span>
+        <span> Back to List </span>
+    </a>
+
+
+</div>

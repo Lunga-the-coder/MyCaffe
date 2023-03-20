@@ -1,0 +1,72 @@
+﻿@model MyCaffe.Models.DeliveryDetail
+
+@{
+    ViewBag.Title = "DeliveryMethod";
+}
+
+<h3>Delivery Method</h3>
+
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+</style>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" style="display: none">
+            @Html.LabelFor(model => model.OrderId, "OrderId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OrderId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeliveryCampus, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.DeliveryCampus, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DeliveryCampus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display: none">
+            @Html.LabelFor(model => model.DeliveryPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DeliveryPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DeliveryPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeliveryBlock, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DeliveryBlock, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DeliveryBlock, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeliveryInstructions, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.DeliveryInstructions, new { @class = "form-control", rows = "6" })
+                @Html.ValidationMessageFor(model => model.DeliveryInstructions, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Confirm Order" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿body {
+    background-color:whitesmoke;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-inline:inherit;
+    align-items:baseline;
+    font-size:large;
+    align-content:flex-start;
+}
+img {
+    margin: auto;
+    align-content: flex-end;
+    align-content:space-between;
+    border-radius: 30px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+button{
+    margin:inherit;
+    align-content:flex-end;
+    background-color:greenyellow;
+    border-radius:70px;
+    padding-inline:auto;
+    padding-block-end:auto;
+}
+

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<MyCaffe.Models.Order>
+@using Microsoft.AspNet.Identity;
+@using MyCaffe.Models;
+
+@{
+    ViewBag.Title = "Past Orders";
+    ApplicationDbContext db = new ApplicationDbContext();
+
+}
+
+<center>
+    <h2> Past Orders </h2>
+</center>
+<br />
+
+<style>
+    body {
+        background-color: bisque;
+    }
+
+    h1 {
+        font-style: italic;
+    }
+</style>
+
+<table class="table">
+    <tr>
+        <th>
+            Order Id
+        </th>
+        @if (User.IsInRole("Admin"))
+        {
+            <th>
+                Student Name
+            </th>
+        }
+        <th>
+            Total Price
+        </th>
+        <th>
+            Order Date
+        </th>
+        <th>
+            Order Time
+        </th>
+        <th>
+            Delivery Time
+        </th>
+        <th>
+            Status
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        string fullName = "";
+
+        fullName = db.Users.Find(item.UserId).FirstName + " " + db.Users.Find(item.UserId).Surname;
+
+<tr>
+    <td>
+        #@Html.DisplayFor(modelItem => item.OrderId)
+
+    </td>
+    @{
+        if (User.IsInRole("Admin"))
+        {
+            <td>
+                @fullName
+            </td>
+        }
+    }
+    <td>
+        @Html.DisplayFor(modelItem => item.TotalPrice)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Time)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ActualDelivery)
+    </td>
+    <td>
+        <a type="button" disabled="disabled" class="btn btn-sm btn-success">
+            <span> Delivered </span>
+        </a> |
+    </td>
+    <td>
+        <a type="button" class="btn btn-sm btn-primary" href="@Url.Action("Details", "Orders", new {id=item.OrderId})">
+            <span class="glyphicon glyphicon-list"></span>
+            <span> Details </span>
+        </a>
+    </td>
+</tr>
+    }
+
+</table>
+
